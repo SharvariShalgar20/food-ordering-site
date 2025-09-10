@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tasty Bites - Food Ordering</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        
+        .header {
+            background-color: #ff6b6b;
+            color: white;
+            text-align: center;
+            padding: 1rem 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 1rem;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .menu-section {
+            margin-bottom: 2rem;
+        }
+        
+        .section-title {
+            color: #ff6b6b;
+            border-bottom: 2px solid #ff6b6b;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .menu-item {
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 1rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+        
+        .menu-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .menu-item h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        
+        .price {
+            font-weight: bold;
+            color: #ff6b6b;
+        }
+        
+        .item-controls {
+            display: flex;
+            align-items: center;
+            margin-top: 1rem;
+        }
+        
+        .quantity-control {
+            display: flex;
+            align-items: center;
+        }
+        
+        .quantity-btn {
+            background-color: #eee;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        
+        .quantity {
+            margin: 0 10px;
+            font-weight: bold;
+        }
+        
+        .add-btn {
+            background-color: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: auto;
+            transition: background-color 0.3s;
+        }
+        
+        .add-btn:hover {
+            background-color: #ff5252;
+        }
+        
+        .cart-section {
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            padding: 1rem;
+        }
+        
+        .cart-items {
+            margin-bottom: 1rem;
+        }
+        
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .cart-item-name {
+            flex-grow: 1;
+        }
+        
+        .cart-item-price {
+            font-weight: bold;
+            margin: 0 1rem;
+        }
+        
+        .remove-btn {
+            background-color: #ff6b6b;
+            color: white;
+            border: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 12px;
+        }
+        
+        .cart-total {
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 2px solid #ddd;
+        }
+        
+        .checkout-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            width: 100%;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 1rem;
+            transition: background-color 0.3s;
+        }
+        
+        .checkout-btn:hover {
+            background-color: #45a049;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+        
+        input, textarea, select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1.5rem;
+        }
+        
+        .back-btn {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        
+        .back-btn:hover {
+            background-color: #5a6268;
+        }
+        
+        .submit-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        
+        .submit-btn:hover {
+            background-color: #45a049;
+        }
+        
+        .bill-container {
+            background-color: #fff;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .bill-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .bill-details {
+            margin-bottom: 2rem;
+        }
+        
+        .bill-details p {
+            margin: 0.5rem 0;
+        }
+        
+        .bill-items {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+        }
+        
+        .bill-items th, .bill-items td {
+            padding: 0.8rem;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .bill-items th {
+            background-color: #f5f5f5;
+        }
+        
+        .bill-total {
+            text-align: right;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 2px solid #ddd;
+        }
+        
+        .rating {
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: flex-end;
+        }
+        
+        .rating input {
+            display: none;
+        }
+        
+        .rating label {
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            margin-right: 5px;
+            background-color: #ddd;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 40px;
+            font-size: 1.5rem;
+            color: #666;
+            transition: all 0.3s;
+        }
+        
+        .rating label:hover,
+        .rating label:hover ~ label,
+        .rating input:checked ~ label {
+            background-color: #ff6b6b;
+            color: white;
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <h1>Tasty Bites</h1>
+        <p>Delicious food delivered to your doorstep</p>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="container" id="orderPage">
+        <div class="menu-section">
+            <h2 class="section-title">Menu</h2>
+            
+            <h3>Starters</h3>
+            <div class="menu-grid" id="startersMenu">
+                <!-- Menu items will be added here via JavaScript -->
+            </div>
+            
+            <h3>Main Course</h3>
+            <div class="menu-grid" id="mainCourseMenu">
+                <!-- Menu items will be added here via JavaScript -->
+            </div>
+            
+            <h3>Desserts</h3>
+            <div class="menu-grid" id="dessertsMenu">
+                <!-- Menu items will be added here via JavaScript -->
+            </div>
+            
+            <h3>Beverages</h3>
+            <div class="menu-grid" id="beveragesMenu">
+                <!-- Menu items will be added here via JavaScript -->
+            </div>
+        </div>
+        
+        <div class="cart-section">
+            <h2 class="section-title">Your Order</h2>
+            <div class="cart-items" id="cartItems">
+                <p>Your cart is empty. Add some delicious items!</p>
+            </div>
+            <div class="cart-total">
+                <span>Total:</span>
+                <span id="cartTotal">$0.00</span>
+            </div>
+            <button class="checkout-btn" id="checkoutBtn">Proceed to Checkout</button>
+        </div>
+    </div>
+    
+    <!-- Billing Page -->
+    <div class="container hidden" id="billingPage">
+        <h2 class="section-title">Checkout</h2>
+        <form id="checkoutForm">
+            <div class="form-group">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" name="phone" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="address">Delivery Address</label>
+                <textarea id="address" name="address" rows="3" required></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="paymentMethod">Payment Method</label>
+                <select id="paymentMethod" name="paymentMethod" required>
+                    <option value="">-- Select Payment Method --</option>
+                    <option value="cash">Cash on Delivery</option>
+                    <option value="card">Credit/Debit Card</option>
+                    <option value="upi">UPI</option>
+                </select>
+            </div>
+            
+            <div class="button-group">
+                <button type="button" class="back-btn" id="backToOrderBtn">Back to Order</button>
+                <button type="submit" class="submit-btn">Place Order</button>
+            </div>
+        </form>
+    </div>
+    
+    <!-- Bill Page -->
+    <div class="container hidden" id="billPage">
+        <div class="bill-container">
+            <div class="bill-header">
+                <h2>Tasty Bites</h2>
+                <p>Invoice</p>
+            </div>
+            
+            <div class="bill-details" id="billDetails">
+                <!-- Customer details will be added here -->
+            </div>
+            
+            <table class="bill-items">
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody id="billItems">
+                    <!-- Order items will be added here -->
+                </tbody>
+            </table>
+            
+            <div class="bill-total" id="billTotal">
+                <!-- Total will be added here -->
+            </div>
+            
+            <div class="button-group">
+                <button class="back-btn" id="backToBillingBtn">Edit Order</button>
+                <button class="submit-btn" id="proceedToFeedbackBtn">Submit Feedback</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Feedback Page -->
+    <div class="container hidden" id="feedbackPage">
+        <h2 class="section-title">Your Feedback</h2>
+        <p>Thank you for your order! Please share your experience with us.</p>
+        
+        <form id="feedbackForm">
+            <div class="form-group">
+                <label>How would you rate your experience?</label>
+                <div class="rating">
+                    <input type="radio" id="star5" name="rating" value="5" required>
+                    <label for="star5">5</label>
+                    <input type="radio" id="star4" name="rating" value="4">
+                    <label for="star4">4</label>
+                    <input type="radio" id="star3" name="rating" value="3">
+                    <label for="star3">3</label>
+                    <input type="radio" id="star2" name="rating" value="2">
+                    <label for="star2">2</label>
+                    <input type="radio" id="star1" name="rating" value="1">
+                    <label for="star1">1</label>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="foodQuality">Food Quality</label>
+                <select id="foodQuality" name="foodQuality" required>
+                    <option value="">-- Select Rating --</option>
+                    <option value="Excellent">Excellent</option>
+                    <option value="Good">Good</option>
+                    <option value="Average">Average</option>
+                    <option value="Poor">Poor</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="deliveryTime">Delivery Time</label>
+                <select id="deliveryTime" name="deliveryTime" required>
+                    <option value="">-- Select Rating --</option>
+                    <option value="Very Fast">Very Fast</option>
+                    <option value="Fast">Fast</option>
+                    <option value="Average">Average</option>
+                    <option value="Slow">Slow</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="comments">Additional Comments</label>
+                <textarea id="comments" name="comments" rows="4"></textarea>
+            </div>
+            
+            <div class="button-group">
+                <button type="button" class="back-btn" id="backToBillBtn">Back to Bill</button>
+                <button type="submit" class="submit-btn">Submit Feedback</button>
+            </div>
+        </form>
+    </div>
+    
+    <!-- Success Page -->
+    <div class="container hidden" id="successPage">
+        <div class="bill-container" style="text-align: center;">
+            <h2>Thank You!</h2>
+            <p>Your order has been placed successfully and your feedback has been recorded.</p>
+            <p>Order #: <span id="orderNumber"></span></p>
+            <p>We will deliver your food soon!</p>
+            
+            <button class="submit-btn" id="newOrderBtn" style="margin-top: 2rem;">Place New Order</button>
+        </div>
+    </div>
+
+    <script>
+        // Menu data
+        const menuData = {
+            starters: [
+                { id: 's1', name: 'Garlic Bread', price: 3.99, description: 'Toasted bread with garlic butter and herbs' },
+                { id: 's2', name: 'Mozzarella Sticks', price: 4.99, description: 'Golden fried mozzarella with marinara sauce' },
+                { id: 's3', name: 'Chicken Wings', price: 6.99, description: 'Spicy chicken wings with blue cheese dip' },
+                { id: 's4', name: 'Vegetable Spring Rolls', price: 5.99, description: 'Crispy rolls filled with fresh vegetables' }
+            ],
+            mainCourse: [
+                { id: 'm1', name: 'Margherita Pizza', price: 9.99, description: 'Classic pizza with tomato, mozzarella, and basil' },
+                { id: 'm2', name: 'Spaghetti Bolognese', price: 11.99, description: 'Spaghetti with rich meat sauce' },
+                { id: 'm3', name: 'Chicken Alfredo', price: 12.99, description: 'Creamy pasta with grilled chicken' },
+                { id: 'm4', name: 'Vegetable Curry', price: 10.99, description: 'Flavorful curry with mixed vegetables' }
+            ],
+            desserts: [
+                { id: 'd1', name: 'Chocolate Brownie', price: 4.99, description: 'Warm chocolate brownie with vanilla ice cream' },
+                { id: 'd2', name: 'Cheesecake', price: 5.99, description: 'Creamy New York style cheesecake' },
+                { id: 'd3', name: 'Tiramisu', price: 6.99, description: 'Classic Italian dessert with coffee and mascarpone' }
+            ],
+            beverages: [
+                { id: 'b1', name: 'Soft Drink', price: 1.99, description: 'Choice of Coke, Sprite, or Fanta' },
+                { id: 'b2', name: 'Fresh Juice', price: 2.99, description: 'Orange, Apple, or Watermelon' },
+                { id: 'b3', name: 'Iced Tea', price: 2.49, description: 'Refreshing peach or lemon iced tea' }
+            ]
+        };
+        
+        // Cart data
+        let cart = [];
+        let customerData = {};
+        
+        // Page navigation elements
+        const orderPage = document.getElementById('orderPage');
+        const billingPage = document.getElementById('billingPage');
+        const billPage = document.getElementById('billPage');
+        const feedbackPage = document.getElementById('feedbackPage');
+        const successPage = document.getElementById('successPage');
+        
+        // Initialize the app
+        function initApp() {
+            // Populate menu items
+            populateMenu('startersMenu', menuData.starters);
+            populateMenu('mainCourseMenu', menuData.mainCourse);
+            populateMenu('dessertsMenu', menuData.desserts);
+            populateMenu('beveragesMenu', menuData.beverages);
+            
+            // Add event listeners
+            document.getElementById('checkoutBtn').addEventListener('click', goToCheckout);
+            document.getElementById('backToOrderBtn').addEventListener('click', backToOrder);
+            document.getElementById('checkoutForm').addEventListener('submit', processOrder);
+            document.getElementById('backToBillingBtn').addEventListener('click', backToBilling);
+            document.getElementById('proceedToFeedbackBtn').addEventListener('click', goToFeedback);
+            document.getElementById('backToBillBtn').addEventListener('click', backToBill);
+            document.getElementById('feedbackForm').addEventListener('submit', submitFeedback);
+            document.getElementById('newOrderBtn').addEventListener('click', startNewOrder);
+            
+            // Update cart display
+            updateCartDisplay();
+        }
+        
+        // Populate menu items
+        function populateMenu(containerId, items) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            
+            items.forEach(item => {
+                const menuItem = document.createElement('div');
+                menuItem.className = 'menu-item';
+                menuItem.innerHTML = `
+                    <h3>${item.name}</h3>
+                    <p>${item.description}</p>
+                    <p class="price">$${item.price.toFixed(2)}</p>
+                    <div class="item-controls">
+                        <div class="quantity-control">
+                            <button class="quantity-btn" onclick="decreaseQuantity('${item.id}')">-</button>
+                            <span class="quantity" id="quantity-${item.id}">1</span>
+                            <button class="quantity-btn" onclick="increaseQuantity('${item.id}')">+</button>
+                        </div>
+                        <button class="add-btn" onclick="addToCart('${item.id}', '${item.name}', ${item.price})">Add</button>
+                    </div>
+                `;
+                container.appendChild(menuItem);
+            });
+        }
+        
+        // Increase quantity
+        function increaseQuantity(itemId) {
+            const quantityElement = document.getElementById(`quantity-${itemId}`);
+            let quantity = parseInt(quantityElement.textContent);
+            quantityElement.textContent = quantity + 1;
+        }
+        
+        // Decrease quantity
+        function decreaseQuantity(itemId) {
+            const quantityElement = document.getElementById(`quantity-${itemId}`);
+            let quantity = parseInt(quantityElement.textContent);
+            if (quantity > 1) {
+                quantityElement.textContent = quantity - 1;
+            }
+        }
+        
+        // Add item to cart
+        function addToCart(itemId, itemName, itemPrice) {
+            const quantityElement = document.getElementById(`quantity-${itemId}`);
+            const quantity = parseInt(quantityElement.textContent);
+            
+            // Check if item already in cart
+            const existingItem = cart.find(item => item.id === itemId);
+            
+            if (existingItem) {
+                existingItem.quantity += quantity;
+            } else {
+                cart.push({
+                    id: itemId,
+                    name: itemName,
+                    price: itemPrice,
+                    quantity: quantity
+                });
+            }
+            
+            // Reset quantity to 1
+            quantityElement.textContent = '1';
+            
+            // Update cart display
+            updateCartDisplay();
+            
+            // Show success message
+            alert(`${quantity} ${itemName}(s) added to cart!`);
+        }
+        
+        // Remove item from cart
+        function removeFromCart(itemId) {
+            cart = cart.filter(item => item.id !== itemId);
+            updateCartDisplay();
+        }
+        
+        // Update cart display
+        function updateCartDisplay() {
+            const cartItemsContainer = document.getElementById('cartItems');
+            const cartTotalElement = document.getElementById('cartTotal');
+            
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = '<p>Your cart is empty. Add some delicious items!</p>';
+                cartTotalElement.textContent = '$0.00';
+                return;
+            }
+            
+            let cartHtml = '';
+            let total = 0;
+            
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                
+                cartHtml += `
+                    <div class="cart-item">
+                        <span class="cart-item-name">${item.name} x ${item.quantity}</span>
+                        <span class="cart-item-price">$${itemTotal.toFixed(2)}</span>
+                        <button class="remove-btn" onclick="removeFromCart('${item.id}')">✕</button>
+                    </div>
+                `;
+            });
+            
+            cartItemsContainer.innerHTML = cartHtml;
+            cartTotalElement.textContent = `$${total.toFixed(2)}`;
+        }
+        
+        // Calculate cart total
+        function calculateTotal() {
+            return cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+        }
+        
+        // Page navigation functions
+        function goToCheckout(e) {
+            e.preventDefault();
+            
+            if (cart.length === 0) {
+                alert('Your cart is empty. Please add some items before checkout.');
+                return;
+            }
+            
+            orderPage.classList.add('hidden');
+            billingPage.classList.remove('hidden');
+        }
+        
+        function backToOrder(e) {
+            e.preventDefault();
+            billingPage.classList.add('hidden');
+            orderPage.classList.remove('hidden');
+        }
+        
+        function processOrder(e) {
+            e.preventDefault();
+            
+            // Get customer data
+            customerData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                address: document.getElementById('address').value,
+                paymentMethod: document.getElementById('paymentMethod').value,
+                orderDate: new Date().toLocaleString()
+            };
+            
+            // Generate random order number
+            customerData.orderNumber = 'ORD-' + Math.floor(100000 + Math.random() * 900000);
+            
+            // Display bill
+            displayBill();
+            
+            billingPage.classList.add('hidden');
+            billPage.classList.remove('hidden');
+        }
+        
+        function displayBill() {
+            const billDetailsContainer = document.getElementById('billDetails');
+            const billItemsContainer = document.getElementById('billItems');
+            const billTotalContainer = document.getElementById('billTotal');
+            
+            // Display customer details
+            billDetailsContainer.innerHTML = `
+                <p><strong>Order #:</strong> ${customerData.orderNumber}</p>
+                <p><strong>Date:</strong> ${customerData.orderDate}</p>
+                <p><strong>Name:</strong> ${customerData.name}</p>
+                <p><strong>Email:</strong> ${customerData.email}</p>
+                <p><strong>Phone:</strong> ${customerData.phone}</p>
+                <p><strong>Address:</strong> ${customerData.address}</p>
+                <p><strong>Payment Method:</strong> ${customerData.paymentMethod}</p>
+            `;
+            
+            // Display order items
+            let billItemsHtml = '';
+            let subtotal = 0;
+            
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                subtotal += itemTotal;
+                
+                billItemsHtml += `
+                    <tr>
+                        <td>${item.name}</td>
+                        <td>${item.quantity}</td>
+                        <td>$${item.price.toFixed(2)}</td>
+                        <td>$${itemTotal.toFixed(2)}</td>
+                    </tr>
+                `;
+            });
+            
+            billItemsContainer.innerHTML = billItemsHtml;
+            
+            // Calculate tax and total
+            const tax = subtotal * 0.08; // 8% tax
+            const total = subtotal + tax;
+            
+            // Display total
+            billTotalContainer.innerHTML = `
+                <p>Subtotal: $${subtotal.toFixed(2)}</p>
+                <p>Tax (8%): $${tax.toFixed(2)}</p>
+                <p>Total: $${total.toFixed(2)}</p>
+            `;
+            
+            // Set order number on success page
+            document.getElementById('orderNumber').textContent = customerData.orderNumber;
+        }
+        
+        function backToBilling(e) {
+            e.preventDefault();
+            billPage.classList.add('hidden');
+            billingPage.classList.remove('hidden');
+        }
+        
+        function goToFeedback(e) {
+            e.preventDefault();
+            billPage.classList.add('hidden');
+            feedbackPage.classList.remove('hidden');
+        }
+        
+        function backToBill(e) {
+            e.preventDefault();
+            feedbackPage.classList.add('hidden');
+            billPage.classList.remove('hidden');
+        }
+        
+        function submitFeedback(e) {
+            e.preventDefault();
+            feedbackPage.classList.add('hidden');
+            successPage.classList.remove('hidden');
+        }
+        
+        function startNewOrder(e) {
+            e.preventDefault();
+            
+            // Reset cart and form data
+            cart = [];
+            customerData = {};
+            document.getElementById('checkoutForm').reset();
+            document.getElementById('feedbackForm').reset();
+            
+            // Update cart display
+            updateCartDisplay();
+            
+            // Navigate to order page
+            successPage.classList.add('hidden');
+            orderPage.classList.remove('hidden');
+        }
+        
+        // Initialize the app when the DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', initApp);
+    </script>
+</body>
+</html>
